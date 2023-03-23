@@ -999,6 +999,7 @@ class GitHubClient(HttpClient, RateLimitHandler):
         remaining = 0
         try:
             headers = super().fetch(rate_url).headers
+            logger.warning(f"Response headers: {headers} and url: {rate_url}")
             if self.rate_limit_header in headers:
                 remaining = int(headers[self.rate_limit_header])
         except requests.exceptions.HTTPError as error:
