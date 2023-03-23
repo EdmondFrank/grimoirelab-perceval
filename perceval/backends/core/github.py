@@ -994,7 +994,8 @@ class GitHubClient(HttpClient, RateLimitHandler):
         """Return token's remaining API points"""
 
         rate_url = urijoin(self.base_url, self.RRATE_LIMIT)
-        self.session.headers.update({self.HAUTHORIZATION: 'token ' + token})
+        self.session.headers.update({self.HAUTHORIZATION: 'Bearer ' + token})
+        logger.warning(f"Rate limit with token: {token} and headers: {self.session.headers}")
         remaining = 0
         try:
             headers = super().fetch(rate_url).headers
@@ -1038,7 +1039,7 @@ class GitHubClient(HttpClient, RateLimitHandler):
 
         # If we have any tokens - use best of them
         self.current_token = self.tokens[token_idx]
-        self.session.headers.update({self.HAUTHORIZATION: 'token ' + self.current_token})
+        self.session.headers.update({self.HAUTHORIZATION: 'Bearer ' + self.current_token})
         # Update rate limit data for the current token
         self._update_current_rate_limit()
 
